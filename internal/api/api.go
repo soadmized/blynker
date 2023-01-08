@@ -11,30 +11,32 @@ import (
 )
 
 type API struct {
-	Router  *http.ServeMux
+	http.ServeMux
 	service iface.Service
 }
 
 func New() *API {
 	srv := service.New()
-	a := API{Router: http.NewServeMux(), service: &srv}
+	a := API{service: &srv}
 	a.registerHandlers()
 
 	return &a
 }
 
 func (h *API) registerHandlers() {
-	h.Router.HandleFunc("/get_data", h.Get)
-	h.Router.HandleFunc("/set_data", h.Set)
+	h.HandleFunc("/get_data", h.Get)
+	h.HandleFunc("/set_data", h.Set)
 }
 
 func (h *API) Get(writer http.ResponseWriter, request *http.Request) {
-	sensor := h.service.Get()
-	err := json.NewEncoder(writer).Encode(sensor)
-	if err != nil {
-		writer.WriteHeader(http.StatusInternalServerError)
-		log.Print(err)
+	if request.Method == http.MethodPost {
+		sensor := h.service.Get()
+		makeResponse(writer, sensor)
+	} else {
+		writer.WriteHeader(http.StatusBadRequest)
+		makeResponse(writer, "WRONG METHOD, USE POST")
 	}
+
 }
 
 func (h *API) Set(writer http.ResponseWriter, request *http.Request) {
@@ -48,6 +50,14 @@ func (h *API) Set(writer http.ResponseWriter, request *http.Request) {
 	}
 
 	err = h.service.Set(&s)
+	if err != nil {
+		writer.WriteHeader(http.StatusInternalServerError)
+		log.Print(err)
+	}
+}
+
+func makeResponse(writer http.ResponseWriter, data any) {
+	err := json.NewEncoder(writer).Encode(data)
 	if err != nil {
 		writer.WriteHeader(http.StatusInternalServerError)
 		log.Print(err)
