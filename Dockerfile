@@ -7,7 +7,6 @@ COPY go.mod go.sum ./
 RUN go mod download && go mod verify
 
 COPY . .
-RUN go build -o /usr/local/bin/app #./...
-EXPOSE 8888
+RUN go build -o /usr/local/bin/app
 
 CMD ["app"]
