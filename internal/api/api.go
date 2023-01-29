@@ -25,6 +25,7 @@ func New() *API {
 }
 
 func (h *API) registerHandlers() {
+	h.HandleFunc("/", h.DisplayValues)
 	h.HandleFunc("/get_data", h.Get)
 	h.HandleFunc("/set_data", h.Set)
 }
@@ -55,6 +56,14 @@ func (h *API) Set(writer http.ResponseWriter, request *http.Request) {
 	if err != nil {
 		writer.WriteHeader(http.StatusInternalServerError)
 		log.Print(err)
+	}
+}
+
+func (h *API) DisplayValues(writer http.ResponseWriter, request *http.Request) {
+	data := h.service.Get()
+	err := json.NewEncoder(writer).Encode(data)
+	if err != nil {
+		writer.WriteHeader(http.StatusInternalServerError)
 	}
 }
 
