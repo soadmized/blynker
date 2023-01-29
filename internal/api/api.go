@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"time"
 
 	"blynker/internal/iface"
 	"blynker/internal/model"
@@ -49,6 +50,7 @@ func (h *API) Set(writer http.ResponseWriter, request *http.Request) {
 		log.Print(err)
 	}
 
+	s.UpdatedAt = time.Now()
 	err = h.service.Set(&s)
 	if err != nil {
 		writer.WriteHeader(http.StatusInternalServerError)
