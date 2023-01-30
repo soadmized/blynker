@@ -16,7 +16,7 @@ type Repo struct {
 	Data model.Sensor
 }
 
-func (r *Repo) Save(data *model.Sensor) error {
+func (r *Repo) SaveData(data *model.Sensor) error {
 	r.Data = *data
 
 	updAt := r.Data.UpdatedAt.Format(time.RFC3339)
@@ -40,6 +40,6 @@ func (r *Repo) Save(data *model.Sensor) error {
 	return nil
 }
 
-func (r *Repo) Get() *model.Sensor {
+func (r *Repo) GetData() *model.Sensor {
 	return &r.Data
 }

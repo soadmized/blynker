@@ -15,15 +15,15 @@ func New() Service {
 	return Service{Repo: &r}
 }
 
-func (s *Service) Set(data *model.Sensor) error {
-	err := s.Repo.Save(data)
+func (s *Service) SaveData(data *model.Sensor) error {
+	err := s.Repo.SaveData(data)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (s *Service) Get() *model.Sensor {
-	data := s.Repo.Get()
+func (s *Service) GetData() *model.Sensor {
+	data := s.Repo.GetData()
 	return data
 }
