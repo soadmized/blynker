@@ -26,57 +26,57 @@ func New() *API {
 func (a *API) registerHandlers() {
 	a.HandleFunc("/", a.DisplayValues)
 	a.HandleFunc("/get_data", a.Get)
-	a.HandleFunc("/set_data", a.Set)
+	a.HandleFunc("/set_data", a.Save)
 }
 
-func (a *API) Get(writer http.ResponseWriter, request *http.Request) {
-	if request.Method == http.MethodPost {
+func (a *API) Get(w http.ResponseWriter, req *http.Request) {
+	if req.Method == http.MethodPost {
 		sensor := a.service.GetData()
-		makeResponse(writer, sensor)
+		makeResponse(w, sensor)
 	} else {
-		writer.WriteHeader(http.StatusBadRequest)
-		makeResponse(writer, "WRONG METHOD, USE POST")
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		makeResponse(w, "WRONG METHOD, USE POST")
 	}
 }
 
-func (a *API) Set(writer http.ResponseWriter, request *http.Request) {
-	if request.Method == http.MethodPost {
-		dec := json.NewDecoder(request.Body)
+func (a *API) Save(w http.ResponseWriter, req *http.Request) {
+	if req.Method == http.MethodPost {
+		dec := json.NewDecoder(req.Body)
 		s := model.Sensor{}
 
 		err := dec.Decode(&s)
 		if err != nil {
-			writer.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusInternalServerError)
 			log.Print(err)
 		}
 
 		s.UpdatedAt = time.Now()
 		err = a.service.SaveData(&s)
 		if err != nil {
-			writer.WriteHeader(http.StatusInternalServerError)
+			w.WriteHeader(http.StatusInternalServerError)
 			log.Print(err)
 		}
-		makeResponse(writer, "DATA IS SAVED!")
+		makeResponse(w, "DATA IS SAVED!")
 	} else {
-		writer.WriteHeader(http.StatusBadRequest)
-		makeResponse(writer, "WRONG METHOD, USE POST")
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		makeResponse(w, "WRONG METHOD, USE POST")
 	}
 }
 
-func (a *API) DisplayValues(writer http.ResponseWriter, request *http.Request) {
-	if request.Method == http.MethodGet {
+func (a *API) DisplayValues(w http.ResponseWriter, req *http.Request) {
+	if req.Method == http.MethodGet {
 		data := a.service.GetData()
-		makeResponse(writer, data)
+		makeResponse(w, data)
 	} else {
-		writer.WriteHeader(http.StatusBadRequest)
-		makeResponse(writer, "WRONG METHOD, USE GET")
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		makeResponse(w, "WRONG METHOD, USE GET")
 	}
 }
 
-func makeResponse(writer http.ResponseWriter, data any) {
-	err := json.NewEncoder(writer).Encode(data)
+func makeResponse(w http.ResponseWriter, data any) {
+	err := json.NewEncoder(w).Encode(data)
 	if err != nil {
-		writer.WriteHeader(http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
 		log.Print(err)
 	}
 }

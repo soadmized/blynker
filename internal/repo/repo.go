@@ -19,10 +19,10 @@ type Repo struct {
 func (r *Repo) SaveData(data *model.Sensor) error {
 	r.Data = *data
 
-	updAt := r.Data.UpdatedAt.Format(time.RFC3339)
 	temp := strconv.FormatFloat(r.Data.Temperature, 'G', 2, 64)
 	light := strconv.FormatInt(int64(r.Data.Light), 10)
 	movement := strconv.FormatBool(r.Data.Movement)
+	updAt := r.Data.UpdatedAt.Format(time.RFC3339)
 
 	filename := "data.csv"
 	file, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0777)
