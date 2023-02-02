@@ -3,11 +3,11 @@ package iface
 import "blynker/internal/model"
 
 type Repository interface {
-	Save(data *model.Sensor) error
-	Get() *model.Sensor
+	SaveData(data *model.Sensor) error
+	GetData() *model.Sensor
 }
 
 type Service interface {
-	Set(sensor *model.Sensor) error
-	Get() *model.Sensor
+	SaveData(sensor *model.Sensor) error
+	GetData() *model.Sensor
 }

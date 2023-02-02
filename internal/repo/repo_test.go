@@ -23,6 +23,6 @@ func (s *RepoSuite) TestRepo_Save() {
 		UpdatedAt:   time.Time{},
 	}
 	testRepo := new(Repo)
-	err := testRepo.Save(&data)
+	err := testRepo.SaveData(&data)
 	s.Require().NoError(err)
 }

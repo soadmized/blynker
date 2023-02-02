@@ -1,14 +1,13 @@
 package api
 
 import (
+	"blynker/internal/iface"
+	"blynker/internal/model"
+	"blynker/internal/service"
 	"encoding/json"
 	"log"
 	"net/http"
 	"time"
-
-	"blynker/internal/iface"
-	"blynker/internal/model"
-	"blynker/internal/service"
 )
 
 type API struct {
@@ -19,58 +18,48 @@ type API struct {
 func New() *API {
 	srv := service.New()
 	a := API{service: &srv}
-	a.registerHandlers()
+	a.routeHandlers()
 
 	return &a
 }
 
-func (h *API) registerHandlers() {
-	h.HandleFunc("/", h.DisplayValues)
-	h.HandleFunc("/get_data", h.Get)
-	h.HandleFunc("/set_data", h.Set)
+func (a *API) routeHandlers() {
+	a.HandleFunc("/", a.Route)
 }
 
-func (h *API) Get(writer http.ResponseWriter, request *http.Request) {
-	if request.Method == http.MethodPost {
-		sensor := h.service.Get()
-		makeResponse(writer, sensor)
-	} else {
-		writer.WriteHeader(http.StatusBadRequest)
-		makeResponse(writer, "WRONG METHOD, USE POST")
-	}
-
+func (a *API) Get(w http.ResponseWriter, req *http.Request) {
+	sensor := a.service.GetData()
+	makeResponse(w, sensor)
 }
 
-func (h *API) Set(writer http.ResponseWriter, request *http.Request) {
-	dec := json.NewDecoder(request.Body)
+func (a *API) Save(w http.ResponseWriter, req *http.Request) {
+	dec := json.NewDecoder(req.Body)
 	s := model.Sensor{}
 
 	err := dec.Decode(&s)
 	if err != nil {
-		writer.WriteHeader(http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
 		log.Print(err)
 	}
 
 	s.UpdatedAt = time.Now()
-	err = h.service.Set(&s)
+	err = a.service.SaveData(&s)
 	if err != nil {
-		writer.WriteHeader(http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
 		log.Print(err)
 	}
+	makeResponse(w, "DATA IS SAVED!")
 }
 
-func (h *API) DisplayValues(writer http.ResponseWriter, request *http.Request) {
-	data := h.service.Get()
-	err := json.NewEncoder(writer).Encode(data)
-	if err != nil {
-		writer.WriteHeader(http.StatusInternalServerError)
-	}
+func (a *API) DisplayValues(w http.ResponseWriter, req *http.Request) {
+	data := a.service.GetData()
+	makeResponse(w, data)
 }
 
-func makeResponse(writer http.ResponseWriter, data any) {
-	err := json.NewEncoder(writer).Encode(data)
+func makeResponse(w http.ResponseWriter, data any) {
+	err := json.NewEncoder(w).Encode(data)
 	if err != nil {
-		writer.WriteHeader(http.StatusInternalServerError)
+		w.WriteHeader(http.StatusInternalServerError)
 		log.Print(err)
 	}
 }
