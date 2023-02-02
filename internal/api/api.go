@@ -1,13 +1,14 @@
 package api
 
 import (
-	"blynker/internal/iface"
-	"blynker/internal/model"
-	"blynker/internal/service"
 	"encoding/json"
 	"log"
 	"net/http"
 	"time"
+
+	"blynker/internal/iface"
+	"blynker/internal/model"
+	"blynker/internal/service"
 )
 
 type API struct {
