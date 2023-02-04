@@ -1,7 +1,9 @@
 package repo
 
 import (
+	"blynker/internal/config"
 	"encoding/csv"
+	"log"
 	"os"
 	"strconv"
 	"time"
@@ -10,13 +12,23 @@ import (
 	"blynker/internal/model"
 )
 
-var _ iface.Repository = &Repo{}
+var _ iface.Repository = &CSVRepo{}
 
-type Repo struct {
+type CSVRepo struct {
 	Data model.Sensor
+	conf config.Config
 }
 
-func (r *Repo) SaveData(data *model.Sensor) error {
+func NewCSVRepo() *CSVRepo {
+	conf, err := config.Read()
+	if err != nil {
+		log.Fatal(err)
+	}
+	r := CSVRepo{conf: *conf}
+	return &r
+}
+
+func (r *CSVRepo) SaveData(data *model.Sensor) error {
 	r.Data = *data
 
 	temp := strconv.FormatFloat(r.Data.Temperature, 'G', 2, 64)
@@ -24,8 +36,7 @@ func (r *Repo) SaveData(data *model.Sensor) error {
 	movement := strconv.FormatBool(r.Data.Movement)
 	updAt := r.Data.UpdatedAt.Format(time.RFC3339)
 
-	filename := "data.csv"
-	file, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0777)
+	file, err := os.OpenFile(r.conf.CSVFilename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0777)
 	defer file.Close()
 	if err != nil {
 		return err
@@ -40,6 +51,6 @@ func (r *Repo) SaveData(data *model.Sensor) error {
 	return nil
 }
 
-func (r *Repo) GetData() *model.Sensor {
+func (r *CSVRepo) GetData() *model.Sensor {
 	return &r.Data
 }

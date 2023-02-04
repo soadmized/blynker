@@ -1,19 +1,22 @@
 package main
 
 import (
+	"blynker/internal/api"
+	"blynker/internal/config"
 	"log"
 	"net/http"
-	"os"
-
-	"blynker/internal/api"
+	"strconv"
 )
 
 func main() {
-	port := os.Getenv("PORT")
-	addr := ":" + port
-	server := api.New()
+	conf, err := config.Read()
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	err := http.ListenAndServe(addr, server)
+	addr := ":" + strconv.Itoa(conf.AppPort)
+	server := api.New()
+	err = http.ListenAndServe(addr, server)
 	if err != nil {
 		log.Fatal(err)
 	}

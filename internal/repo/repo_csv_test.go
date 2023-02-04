@@ -22,7 +22,7 @@ func (s *RepoSuite) TestRepo_Save() {
 		Movement:    false,
 		UpdatedAt:   time.Time{},
 	}
-	testRepo := new(Repo)
+	testRepo := new(CSVRepo)
 	err := testRepo.SaveData(&data)
 	s.Require().NoError(err)
 }

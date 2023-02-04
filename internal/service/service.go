@@ -11,8 +11,8 @@ type Service struct {
 }
 
 func New() Service {
-	r := repo.Repo{}
-	return Service{Repo: &r}
+	r := repo.NewCSVRepo()
+	return Service{Repo: r}
 }
 
 func (s *Service) SaveData(data *model.Sensor) error {
