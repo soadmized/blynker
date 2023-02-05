@@ -11,7 +11,7 @@ type Service struct {
 }
 
 func New() Service {
-	r := repo.NewCSVRepo()
+	r := repo.NewInfluxRepo()
 	return Service{Repo: r}
 }
 
