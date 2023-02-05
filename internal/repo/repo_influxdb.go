@@ -3,7 +3,6 @@ package repo
 import (
 	"context"
 	"log"
-	"strconv"
 
 	"github.com/influxdata/influxdb-client-go/v2"
 
@@ -34,8 +33,7 @@ func (r *InfluxRepo) GetData() *model.Sensor {
 }
 
 func (r *InfluxRepo) SaveData(data *model.Sensor) error {
-	url := "http://localhost:" + strconv.Itoa(r.conf.InfluxPort)
-	client := influxdb2.NewClient(url, r.conf.InfluxToken)
+	client := influxdb2.NewClient(r.conf.MakeInfluxURL(), r.conf.InfluxToken)
 	defer client.Close()
 
 	writeAPI := client.WriteAPIBlocking(r.conf.InfluxOrg, r.conf.InfluxBucket)
