@@ -33,6 +33,8 @@ func (r *InfluxRepo) GetData() *model.Sensor {
 }
 
 func (r *InfluxRepo) SaveData(data *model.Sensor) error {
+	r.Data = *data
+
 	client := influxdb2.NewClient(r.conf.MakeInfluxURL(), r.conf.InfluxToken)
 	defer client.Close()
 
