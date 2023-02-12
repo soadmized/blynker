@@ -1,6 +1,7 @@
 package service
 
 import (
+	"blynker/internal/config"
 	"blynker/internal/iface"
 	"blynker/internal/model"
 	"blynker/internal/repo"
@@ -10,8 +11,8 @@ type Service struct {
 	Repo iface.Repository
 }
 
-func New() Service {
-	r := repo.NewInfluxRepo()
+func New(conf *config.Config) Service {
+	r := repo.NewInfluxRepo(conf)
 	return Service{Repo: r}
 }
 

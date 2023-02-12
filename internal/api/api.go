@@ -1,6 +1,7 @@
 package api
 
 import (
+	"blynker/internal/config"
 	"encoding/json"
 	"log"
 	"net/http"
@@ -14,11 +15,12 @@ import (
 type API struct {
 	http.ServeMux
 	service iface.Service
+	conf    *config.Config
 }
 
-func New() *API {
-	srv := service.New()
-	a := API{service: &srv}
+func New(conf *config.Config) *API {
+	srv := service.New(conf)
+	a := API{service: &srv, conf: conf}
 	a.routeHandlers()
 
 	return &a
@@ -28,12 +30,12 @@ func (a *API) routeHandlers() {
 	a.HandleFunc("/", a.Route)
 }
 
-func (a *API) Get(w http.ResponseWriter, req *http.Request) {
+func (a *API) GetData(w http.ResponseWriter, req *http.Request) {
 	sensor := a.service.GetData()
 	makeResponse(w, sensor)
 }
 
-func (a *API) Save(w http.ResponseWriter, req *http.Request) {
+func (a *API) SaveData(w http.ResponseWriter, req *http.Request) {
 	dec := json.NewDecoder(req.Body)
 	s := model.Sensor{}
 
@@ -41,6 +43,7 @@ func (a *API) Save(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		log.Print(err)
+		return
 	}
 
 	s.UpdatedAt = time.Now()
@@ -48,11 +51,12 @@ func (a *API) Save(w http.ResponseWriter, req *http.Request) {
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		log.Print(err)
+		return
 	}
 	makeResponse(w, "DATA IS SAVED!")
 }
 
-func (a *API) DisplayValues(w http.ResponseWriter, req *http.Request) {
+func (a *API) GetStatus(w http.ResponseWriter, req *http.Request) {
 	data := a.service.GetData()
 	makeResponse(w, data)
 }

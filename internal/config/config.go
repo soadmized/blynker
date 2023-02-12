@@ -8,6 +8,8 @@ import (
 
 type Config struct {
 	AppPort      int    `envconfig:"APP_PORT"`
+	User         string `envconfig:"USER"`
+	Pass         string `envconfig:"PASS"`
 	InfluxAddr   string `envconfig:"INFLUX_ADDR"`
 	InfluxPort   int    `envconfig:"INFLUX_PORT"`
 	InfluxToken  string `envconfig:"INFLUX_TOKEN"`

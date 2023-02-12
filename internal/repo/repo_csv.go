@@ -2,7 +2,6 @@ package repo
 
 import (
 	"encoding/csv"
-	"log"
 	"os"
 	"strconv"
 	"time"
@@ -16,15 +15,11 @@ var _ iface.Repository = &CSVRepo{}
 
 type CSVRepo struct {
 	Data model.Sensor
-	conf config.Config
+	conf *config.Config
 }
 
-func NewCSVRepo() *CSVRepo {
-	conf, err := config.Read()
-	if err != nil {
-		log.Fatal(err)
-	}
-	r := CSVRepo{conf: *conf}
+func NewCSVRepo(conf *config.Config) *CSVRepo {
+	r := CSVRepo{conf: conf}
 	return &r
 }
 

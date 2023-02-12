@@ -2,8 +2,6 @@ package repo
 
 import (
 	"context"
-	"log"
-
 	"github.com/influxdata/influxdb-client-go/v2"
 
 	"blynker/internal/config"
@@ -15,16 +13,12 @@ var _ iface.Repository = &InfluxRepo{}
 
 type InfluxRepo struct {
 	Data   model.Sensor
-	conf   config.Config
+	conf   *config.Config
 	influx influxdb2.Client
 }
 
-func NewInfluxRepo() *InfluxRepo {
-	conf, err := config.Read()
-	if err != nil {
-		log.Fatal(err)
-	}
-	r := InfluxRepo{conf: *conf}
+func NewInfluxRepo(conf *config.Config) *InfluxRepo {
+	r := InfluxRepo{conf: conf}
 	return &r
 }
 

@@ -15,7 +15,7 @@ func main() {
 	}
 
 	addr := ":" + strconv.Itoa(conf.AppPort)
-	server := api.New()
+	server := api.New(conf)
 	err = http.ListenAndServe(addr, server)
 	if err != nil {
 		log.Fatal(err)
