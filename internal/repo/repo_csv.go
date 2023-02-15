@@ -26,10 +26,11 @@ func NewCSVRepo(conf *config.Config) *CSVRepo {
 func (r *CSVRepo) SaveData(data *model.Sensor) error {
 	r.Data = *data
 
-	temp := strconv.FormatFloat(r.Data.Temperature, 'G', 2, 64)
-	light := strconv.FormatInt(int64(r.Data.Light), 10)
-	movement := strconv.FormatBool(r.Data.Movement)
-	updAt := r.Data.UpdatedAt.Format(time.RFC3339)
+	sensorID := data.SensorID
+	temp := strconv.FormatFloat(data.Temperature, 'G', 2, 64)
+	light := strconv.FormatInt(int64(data.Light), 10)
+	movement := strconv.FormatBool(data.Movement)
+	updAt := data.UpdatedAt.Format(time.RFC3339)
 
 	file, err := os.OpenFile(r.conf.CSVFilename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0777)
 	defer file.Close()
@@ -38,7 +39,7 @@ func (r *CSVRepo) SaveData(data *model.Sensor) error {
 	}
 
 	writer := csv.NewWriter(file)
-	err = writer.WriteAll([][]string{{updAt, temp, light, movement}})
+	err = writer.WriteAll([][]string{{sensorID, updAt, temp, light, movement}})
 	if err != nil {
 		return err
 	}

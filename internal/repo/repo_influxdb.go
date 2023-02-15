@@ -35,15 +35,15 @@ func (r *InfluxRepo) SaveData(data *model.Sensor) error {
 	writeAPI := client.WriteAPIBlocking(r.conf.InfluxOrg, r.conf.InfluxBucket)
 
 	tempP := influxdb2.NewPointWithMeasurement("temperature").
-		AddTag("id", "TODO").
+		AddTag("id", data.SensorID).
 		AddField("temperature", data.Temperature).
 		SetTime(data.UpdatedAt)
 	lightP := influxdb2.NewPointWithMeasurement("light").
-		AddTag("id", "TODO").
+		AddTag("id", data.SensorID).
 		AddField("light", data.Light).
 		SetTime(data.UpdatedAt)
 	moveP := influxdb2.NewPointWithMeasurement("movement").
-		AddTag("id", "TODO").
+		AddTag("id", data.SensorID).
 		AddField("movement", data.Movement).
 		SetTime(data.UpdatedAt)
 
