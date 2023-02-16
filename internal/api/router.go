@@ -35,7 +35,7 @@ func (a *API) Route(w http.ResponseWriter, req *http.Request) {
 
 	if req.URL.Path == "/" {
 		if req.Method == http.MethodGet {
-			a.GetStatus(w, req)
+			a.CheckStatus(w, req)
 		} else {
 			w.WriteHeader(http.StatusMethodNotAllowed)
 			makeResponse(w, "WRONG METHOD, USE GET")

@@ -14,9 +14,11 @@ _**Blynkerbot**_ gets data from _**Blynker**_ and shows to user.
 At this time Server is using InfluxDB as a sensor values storage.
 
 #### Now there are 2 endpoints:
-`POST /get_data` - returns last values of sensor 
+`POST \get_data` - returns last values of sensor 
 
-`POST /set_data` - save values to storage
+`POST \set_data` - saves values to storage
+
+`GET \` - checks the status of sensor
 
 #### TODO:
 
