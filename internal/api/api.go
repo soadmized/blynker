@@ -56,9 +56,14 @@ func (a *API) SaveData(w http.ResponseWriter, req *http.Request) {
 	makeResponse(w, "DATA IS SAVED!")
 }
 
-func (a *API) GetStatus(w http.ResponseWriter, req *http.Request) {
-	data := a.service.GetData()
-	makeResponse(w, data)
+func (a *API) CheckStatus(w http.ResponseWriter, req *http.Request) {
+	delta := a.service.GetData().UpdatedAt.Sub(time.Now()).Abs()
+	log.Print(delta)
+	if delta > time.Second*5 {
+		makeResponse(w, "Sensor is offline")
+		return
+	}
+	makeResponse(w, "Sensor is online")
 }
 
 func makeResponse(w http.ResponseWriter, data any) {

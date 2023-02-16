@@ -1,7 +1,8 @@
-package repo
+package values
 
 import (
 	"context"
+
 	"github.com/influxdata/influxdb-client-go/v2"
 
 	"blynker/internal/config"
@@ -9,24 +10,24 @@ import (
 	"blynker/internal/model"
 )
 
-var _ iface.Repository = &InfluxRepo{}
+var _ iface.Repository = &Repo{}
 
-type InfluxRepo struct {
+type Repo struct {
 	Data   model.Sensor
 	conf   *config.Config
 	influx influxdb2.Client
 }
 
-func NewInfluxRepo(conf *config.Config) *InfluxRepo {
-	r := InfluxRepo{conf: conf}
+func NewRepo(conf *config.Config) *Repo {
+	r := Repo{conf: conf}
 	return &r
 }
 
-func (r *InfluxRepo) GetData() *model.Sensor {
+func (r *Repo) GetData() *model.Sensor {
 	return &r.Data
 }
 
-func (r *InfluxRepo) SaveData(data *model.Sensor) error {
+func (r *Repo) SaveData(data *model.Sensor) error {
 	r.Data = *data
 
 	client := influxdb2.NewClient(r.conf.MakeInfluxURL(), r.conf.InfluxToken)

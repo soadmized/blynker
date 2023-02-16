@@ -4,7 +4,7 @@ import (
 	"blynker/internal/config"
 	"blynker/internal/iface"
 	"blynker/internal/model"
-	"blynker/internal/repo"
+	repo "blynker/internal/repo/values"
 )
 
 type Service struct {
@@ -12,7 +12,7 @@ type Service struct {
 }
 
 func New(conf *config.Config) Service {
-	r := repo.NewInfluxRepo(conf)
+	r := repo.NewRepo(conf)
 	return Service{Repo: r}
 }
 
