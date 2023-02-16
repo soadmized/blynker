@@ -11,9 +11,9 @@ Some defenitions:
 
 _**Sensor**_ sends data to _**Blynker**_. _**Blynker**_ saves incoming data.
 _**Blynkerbot**_ gets data from _**Blynker**_ and shows to user.
-At this time Server is using InfluxDB as a sensor values storage.
+At this time  _**Blynker**_ is using InfluxDB as a sensor values storage.
 
-#### Now there are 2 endpoints:
+#### Now there are 3 endpoints:
 `POST \get_data` - returns last values of sensor 
 
 `POST \set_data` - saves values to storage
