@@ -24,6 +24,7 @@ At this time  _**Blynker**_ is using InfluxDB as a sensor values storage.
 
 - Dockercompose - server + InfluxDB
 - Add storage for sensors credentials
+- Add logging middleware
 - Add swagger
 - Add linters
 - Refactor `\get_data` to `\get_data\{sensorID}`
