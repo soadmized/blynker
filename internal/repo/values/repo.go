@@ -1,7 +1,7 @@
 package values
 
 import (
-	"context"
+	"github.com/influxdata/influxdb-client-go/v2/api/write"
 
 	"github.com/influxdata/influxdb-client-go/v2"
 
@@ -15,11 +15,15 @@ var _ iface.Repository = &Repo{}
 type Repo struct {
 	Data   model.Sensor
 	conf   *config.Config
-	influx influxdb2.Client
+	client influxdb2.Client
 }
 
 func New(conf *config.Config) *Repo {
-	r := Repo{conf: conf}
+	client := influxdb2.NewClient(conf.MakeInfluxURL(), conf.InfluxToken)
+	r := Repo{
+		conf:   conf,
+		client: client,
+	}
 	return &r
 }
 
@@ -30,36 +34,39 @@ func (r *Repo) GetData() *model.Sensor {
 func (r *Repo) SaveData(data *model.Sensor) error {
 	r.Data = *data
 
-	client := influxdb2.NewClient(r.conf.MakeInfluxURL(), r.conf.InfluxToken)
-	defer client.Close()
+	defer r.client.Close()
 
-	writeAPI := client.WriteAPIBlocking(r.conf.InfluxOrg, r.conf.InfluxBucket)
+	writeAPI := r.client.WriteAPI(r.conf.InfluxOrg, r.conf.InfluxBucket)
 
-	tempP := influxdb2.NewPointWithMeasurement("temperature").
-		AddTag("id", data.SensorID).
-		AddField("temperature", data.Temperature).
-		SetTime(data.UpdatedAt)
-	lightP := influxdb2.NewPointWithMeasurement("light").
-		AddTag("id", data.SensorID).
-		AddField("light", data.Light).
-		SetTime(data.UpdatedAt)
-	moveP := influxdb2.NewPointWithMeasurement("movement").
-		AddTag("id", data.SensorID).
-		AddField("movement", data.Movement).
-		SetTime(data.UpdatedAt)
+	tempP := r.prepareMeasurementPoint("temperature")
+	lightP := r.prepareMeasurementPoint("light")
+	moveP := r.prepareMeasurementPoint("movement")
 
-	err := writeAPI.WritePoint(context.Background(), tempP)
-	if err != nil {
-		return err
-	}
-	err = writeAPI.WritePoint(context.Background(), lightP)
-	if err != nil {
-		return err
-	}
-	err = writeAPI.WritePoint(context.Background(), moveP)
-	if err != nil {
-		return err
-	}
+	go writeAPI.WritePoint(tempP)
+	go writeAPI.WritePoint(lightP)
+	go writeAPI.WritePoint(moveP)
 
 	return nil
+}
+
+// prepareMeasurementPoint prepares data point for InfluxDB.
+// Accepts only "temperature", "light", "movement" arguments
+func (r *Repo) prepareMeasurementPoint(measurement string) *write.Point {
+	var arg any
+
+	switch measurement {
+	case "temperature":
+		arg = r.Data.Temperature
+	case "light":
+		arg = r.Data.Light
+	case "movement":
+		arg = r.Data.Movement
+	}
+
+	point := influxdb2.NewPointWithMeasurement(measurement).
+		AddTag("id", r.Data.SensorID).
+		AddField(measurement, arg).
+		SetTime(r.Data.UpdatedAt)
+
+	return point
 }
