@@ -12,7 +12,7 @@ type Service struct {
 }
 
 func New(conf *config.Config) Service {
-	r := repo.NewRepo(conf)
+	r := repo.New(conf)
 	return Service{Repo: r}
 }
 
