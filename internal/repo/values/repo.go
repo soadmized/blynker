@@ -18,7 +18,7 @@ type Repo struct {
 	influx influxdb2.Client
 }
 
-func NewRepo(conf *config.Config) *Repo {
+func New(conf *config.Config) *Repo {
 	r := Repo{conf: conf}
 	return &r
 }
