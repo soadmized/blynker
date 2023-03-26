@@ -17,7 +17,7 @@ func New(conf *config.Config) Service {
 }
 
 func (s *Service) SaveData(data *model.Sensor) error {
-	err := s.Repo.SaveData(data)
+	err := s.Repo.StoreData(data)
 	if err != nil {
 		return err
 	}

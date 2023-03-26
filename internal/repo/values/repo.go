@@ -1,9 +1,8 @@
 package values
 
 import (
-	"github.com/influxdata/influxdb-client-go/v2/api/write"
-
 	"github.com/influxdata/influxdb-client-go/v2"
+	"github.com/influxdata/influxdb-client-go/v2/api/write"
 
 	"blynker/internal/config"
 	"blynker/internal/iface"
@@ -31,7 +30,7 @@ func (r *Repo) GetData() *model.Sensor {
 	return &r.Data
 }
 
-func (r *Repo) SaveData(data *model.Sensor) error {
+func (r *Repo) StoreData(data *model.Sensor) error {
 	r.Data = *data
 
 	defer r.client.Close()

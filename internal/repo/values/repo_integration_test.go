@@ -25,7 +25,7 @@ func TestRepo(t *testing.T) {
 
 	repo := New(conf)
 
-	err = repo.SaveData(&data)
+	err = repo.StoreData(&data)
 	assert.NoError(t, err)
 
 	res := repo.GetData()

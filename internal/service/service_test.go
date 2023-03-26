@@ -47,7 +47,7 @@ func TestService_SaveData(t *testing.T) {
 		}
 
 		repo := values.NewRepositoryMock(t)
-		repo.On("SaveData", mock.Anything).Return(nil).Once()
+		repo.On("StoreData", mock.Anything).Return(nil).Once()
 
 		conf, err := config.Read()
 		require.NoError(t, err)
@@ -67,7 +67,7 @@ func TestService_SaveData(t *testing.T) {
 			UpdatedAt:   time.Now(),
 		}
 		repo := values.NewRepositoryMock(t)
-		repo.On("SaveData", mock.Anything).Return(errors.New("some error")).Once()
+		repo.On("StoreData", mock.Anything).Return(errors.New("some error")).Once()
 
 		conf, err := config.Read()
 		require.NoError(t, err)
