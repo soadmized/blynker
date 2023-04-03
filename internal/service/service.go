@@ -4,7 +4,7 @@ import (
 	"blynker/internal/config"
 	"blynker/internal/iface"
 	"blynker/internal/model"
-	repo "blynker/internal/repo/values"
+	"blynker/internal/repo"
 )
 
 type Service struct {
@@ -17,7 +17,7 @@ func New(conf *config.Config) Service {
 }
 
 func (s *Service) SaveData(data *model.Sensor) error {
-	err := s.Repo.SaveData(data)
+	err := s.Repo.StoreData(data)
 	if err != nil {
 		return err
 	}
