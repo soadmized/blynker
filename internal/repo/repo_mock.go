@@ -13,8 +13,8 @@ type RepoMock struct {
 	mock.Mock
 }
 
-// GetData provides a mock function with given fields:
-func (_m *RepoMock) GetData() *model.Sensor {
+// GetValues provides a mock function with given fields:
+func (_m *RepoMock) GetValues() *model.Sensor {
 	ret := _m.Called()
 
 	var r0 *model.Sensor
@@ -30,7 +30,7 @@ func (_m *RepoMock) GetData() *model.Sensor {
 }
 
 // StoreData provides a mock function with given fields: data
-func (_m *RepoMock) StoreData(data *model.Sensor) error {
+func (_m *RepoMock) StoreValues(data *model.Sensor) error {
 	ret := _m.Called(data)
 
 	var r0 error

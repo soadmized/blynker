@@ -30,10 +30,9 @@ At this time  _**Blynker**_ is using InfluxDB as a sensor values storage.
 - Refactor `\get_data` to `\get_data\{sensorID}`
 - Add endpoint `\get_sensors`
 - Add github actions for auto deployment
-
+- Add environment check
 - Refactor server to work with more than one sensor
 
 #### DONE:
 
 - Remove CSV repo
-

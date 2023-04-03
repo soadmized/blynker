@@ -14,13 +14,13 @@ func TestAPI_GetData(t *testing.T) {
 	require.NoError(t, err)
 
 	srvMock := service.NewMock(t)
-	srvMock.On("GetData")
+	srvMock.On("GetValues")
 
 	api := API{
 		ServeMux: http.ServeMux{},
 		service:  srvMock,
 		conf:     conf,
 	}
-	
+
 	fmt.Println(api)
 }

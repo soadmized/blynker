@@ -14,7 +14,7 @@ type ServiceMock struct {
 }
 
 // GetData provides a mock function with given fields:
-func (_m *ServiceMock) GetData() *model.Sensor {
+func (_m *ServiceMock) GetValues() *model.Sensor {
 	ret := _m.Called()
 
 	var r0 *model.Sensor
@@ -30,7 +30,7 @@ func (_m *ServiceMock) GetData() *model.Sensor {
 }
 
 // SaveData provides a mock function with given fields: sensor
-func (_m *ServiceMock) SaveData(sensor *model.Sensor) error {
+func (_m *ServiceMock) SaveValues(sensor *model.Sensor) error {
 	ret := _m.Called(sensor)
 
 	var r0 error

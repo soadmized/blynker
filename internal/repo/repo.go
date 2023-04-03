@@ -27,12 +27,12 @@ func New(conf *config.Config) *Repo {
 	return &r
 }
 
-func (r *Repo) GetData() *model.Sensor {
+func (r *Repo) GetValues() *model.Sensor {
 	return &r.Data
 }
 
-func (r *Repo) StoreData(data *model.Sensor) error {
-	r.Data = *data
+func (r *Repo) StoreValues(sensor *model.Sensor) error {
+	r.Data = *sensor
 
 	defer r.client.Close()
 
@@ -47,6 +47,11 @@ func (r *Repo) StoreData(data *model.Sensor) error {
 	go writeAPI.WritePoint(moveP)
 
 	return nil
+}
+
+func (r *Repo) GetSensorIDs() []string {
+	//TODO implement me
+	panic("implement me")
 }
 
 // prepareMeasurementPoint prepares data point for InfluxDB.
