@@ -24,7 +24,7 @@ func TestService_GetData(t *testing.T) {
 	}
 
 	repo := values.NewRepositoryMock(t)
-	repo.On("GetData", mock.Anything).Return(&wantData).Once()
+	repo.On("GetValues", mock.Anything).Return(&wantData).Once()
 
 	conf, err := config.Read()
 	require.NoError(t, err)
@@ -32,7 +32,7 @@ func TestService_GetData(t *testing.T) {
 	srv := New(conf)
 	srv.Repo = repo
 
-	res := srv.GetData()
+	res := srv.GetValues()
 	assert.Equal(t, &wantData, res)
 }
 
@@ -47,7 +47,7 @@ func TestService_SaveData(t *testing.T) {
 		}
 
 		repo := values.NewRepositoryMock(t)
-		repo.On("StoreData", mock.Anything).Return(nil).Once()
+		repo.On("StoreValues", mock.Anything).Return(nil).Once()
 
 		conf, err := config.Read()
 		require.NoError(t, err)
@@ -55,7 +55,7 @@ func TestService_SaveData(t *testing.T) {
 		srv := New(conf)
 		srv.Repo = repo
 
-		err = srv.SaveData(&wantData)
+		err = srv.SaveValues(&wantData)
 		assert.NoError(t, err)
 	})
 	t.Run("repo error", func(t *testing.T) {
@@ -67,7 +67,7 @@ func TestService_SaveData(t *testing.T) {
 			UpdatedAt:   time.Now(),
 		}
 		repo := values.NewRepositoryMock(t)
-		repo.On("StoreData", mock.Anything).Return(errors.New("some error")).Once()
+		repo.On("StoreValues", mock.Anything).Return(errors.New("some error")).Once()
 
 		conf, err := config.Read()
 		require.NoError(t, err)
@@ -75,7 +75,7 @@ func TestService_SaveData(t *testing.T) {
 		srv := New(conf)
 		srv.Repo = repo
 
-		err = srv.SaveData(&wantData)
+		err = srv.SaveValues(&wantData)
 		assert.Error(t, err)
 	})
 }

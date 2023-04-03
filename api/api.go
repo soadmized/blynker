@@ -31,7 +31,7 @@ func (a *API) routeHandlers() {
 }
 
 func (a *API) GetData(w http.ResponseWriter, req *http.Request) {
-	sensor := a.service.GetData()
+	sensor := a.service.GetValues()
 	makeResponse(w, sensor)
 }
 
@@ -47,7 +47,7 @@ func (a *API) SaveData(w http.ResponseWriter, req *http.Request) {
 	}
 
 	s.UpdatedAt = time.Now()
-	err = a.service.SaveData(&s)
+	err = a.service.SaveValues(&s)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 		log.Print(err)
@@ -57,7 +57,7 @@ func (a *API) SaveData(w http.ResponseWriter, req *http.Request) {
 }
 
 func (a *API) CheckStatus(w http.ResponseWriter, req *http.Request) {
-	delta := a.service.GetData().UpdatedAt.Sub(time.Now()).Abs()
+	delta := a.service.GetValues().UpdatedAt.Sub(time.Now()).Abs()
 	if delta > time.Second*5 {
 		makeResponse(w, "Sensor is offline")
 		return

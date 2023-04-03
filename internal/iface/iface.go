@@ -4,12 +4,14 @@ import "blynker/internal/model"
 
 //go:generate mockery --name Repository --output ../repo --filename repo-mock.go
 type Repository interface {
-	StoreData(data *model.Sensor) error
-	GetData() *model.Sensor
+	StoreValues(sensor *model.Sensor) error
+	GetValues() *model.Sensor
+	GetSensorIDs() []string
 }
 
 //go:generate mockery --name Service --output ../service --filename service-mock.go
 type Service interface {
-	SaveData(sensor *model.Sensor) error
-	GetData() *model.Sensor
+	SaveValues(sensor *model.Sensor) error
+	GetValues() *model.Sensor
+	GetSensorIDs() []string
 }

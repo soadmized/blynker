@@ -11,12 +11,17 @@ type loggingMiddleware struct {
 	next iface.Service
 }
 
-func (l loggingMiddleware) SaveData(sensor *model.Sensor) error {
+func (l loggingMiddleware) SaveValues(sensor *model.Sensor) error {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (l loggingMiddleware) GetData() *model.Sensor {
+func (l loggingMiddleware) GetValues() *model.Sensor {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (l loggingMiddleware) GetSensorIDs() []string {
 	//TODO implement me
 	panic("implement me")
 }

@@ -25,9 +25,9 @@ func TestRepo(t *testing.T) {
 
 	repo := New(conf)
 
-	err = repo.StoreData(&data)
+	err = repo.StoreValues(&data)
 	assert.NoError(t, err)
 
-	res := repo.GetData()
+	res := repo.GetValues()
 	assert.Equal(t, &data, res)
 }
