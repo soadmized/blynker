@@ -4,7 +4,7 @@ import (
 	"blynker/internal/config"
 	"blynker/internal/iface"
 	"blynker/internal/model"
-	repo "blynker/internal/repo/values"
+	"blynker/internal/repo"
 )
 
 type Service struct {

@@ -1,4 +1,4 @@
-package values
+package repo
 
 import (
 	"github.com/influxdata/influxdb-client-go/v2"
@@ -23,6 +23,7 @@ func New(conf *config.Config) *Repo {
 		conf:   conf,
 		client: client,
 	}
+
 	return &r
 }
 
