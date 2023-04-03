@@ -1,7 +1,7 @@
 package main
 
 import (
-	"blynker/internal/api"
+	"blynker/api"
 	"blynker/internal/config"
 	"log"
 	"net/http"
