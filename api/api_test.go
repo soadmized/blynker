@@ -14,7 +14,6 @@ func TestAPI_GetData(t *testing.T) {
 	require.NoError(t, err)
 
 	srvMock := service.NewMock(t)
-	srvMock.On("GetValues")
 
 	api := API{
 		ServeMux: http.ServeMux{},

@@ -19,7 +19,7 @@ func (a *API) Route(w http.ResponseWriter, req *http.Request) {
 		}
 	}
 
-	if req.URL.Path == "/set_data" {
+	if req.URL.Path == "/save_data" {
 		if a.checkAuth(req) {
 			if req.Method == http.MethodPost {
 				a.SaveData(w, req)
