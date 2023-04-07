@@ -16,7 +16,7 @@ func TestRepo(t *testing.T) {
 		SensorID:    "first",
 		Temperature: 13,
 		Light:       777,
-		Movement:    true,
+		Movement:    1,
 		UpdatedAt:   time.Now(),
 	}
 
