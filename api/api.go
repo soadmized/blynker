@@ -1,3 +1,4 @@
+//nolint:exhaustruct
 package api
 
 import (
@@ -58,6 +59,7 @@ func (a *API) SaveData(ctx *gin.Context) {
 	if err != nil {
 		ctx.Writer.WriteHeader(http.StatusInternalServerError)
 		log.Print(err)
+
 		return
 	}
 
@@ -67,17 +69,20 @@ func (a *API) SaveData(ctx *gin.Context) {
 	if err != nil {
 		ctx.Writer.WriteHeader(http.StatusInternalServerError)
 		log.Print(err)
+
 		return
 	}
 
 	ctx.String(http.StatusOK, "DATA IS SAVED!")
 }
 
+//nolint:gosimple
 func (a *API) CheckStatus(ctx *gin.Context) {
 	delta := a.service.GetValues().UpdatedAt.Sub(time.Now()).Abs()
 
 	if delta > time.Second*5 {
 		ctx.String(http.StatusOK, "Sensor is offline")
+
 		return
 	}
 

@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"github.com/kelseyhightower/envconfig"
+	"github.com/pkg/errors"
 )
 
 type Config struct {
@@ -21,8 +22,9 @@ type Config struct {
 func Read() (*Config, error) {
 	conf := Config{}
 	err := envconfig.Process("", &conf)
+
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "read config")
 	}
 
 	return &conf, nil
@@ -30,5 +32,6 @@ func Read() (*Config, error) {
 
 func (c *Config) MakeInfluxURL() string {
 	url := c.InfluxAddr + ":" + strconv.Itoa(c.InfluxPort)
+
 	return url
 }

@@ -5,6 +5,7 @@ import (
 	"blynker/internal/iface"
 	"blynker/internal/model"
 	"blynker/internal/repo"
+	"github.com/pkg/errors"
 )
 
 var _ iface.Service = &Service{}
@@ -22,7 +23,7 @@ func New(conf *config.Config) Service {
 func (s *Service) SaveValues(data *model.Sensor) error {
 	err := s.Repo.StoreValues(data)
 	if err != nil {
-		return err
+		return errors.Wrap(err, "store values")
 	}
 
 	return nil

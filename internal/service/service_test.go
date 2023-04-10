@@ -1,3 +1,4 @@
+//nolint:goerr113
 package service
 
 import (
@@ -5,16 +6,17 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
-	"github.com/stretchr/testify/require"
-
 	"blynker/internal/config"
 	"blynker/internal/model"
 	"blynker/internal/repo"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
+	"github.com/stretchr/testify/require"
 )
 
 func TestService_GetData(t *testing.T) {
+	t.Parallel()
+
 	wantData := model.Sensor{
 		SensorID:    "first",
 		Temperature: 13,
@@ -37,7 +39,11 @@ func TestService_GetData(t *testing.T) {
 }
 
 func TestService_SaveData(t *testing.T) {
+	t.Parallel()
+
 	t.Run("positive case", func(t *testing.T) {
+		t.Parallel()
+
 		wantData := model.Sensor{
 			SensorID:    "first",
 			Temperature: 13,
@@ -59,6 +65,8 @@ func TestService_SaveData(t *testing.T) {
 		assert.NoError(t, err)
 	})
 	t.Run("repo error", func(t *testing.T) {
+		t.Parallel()
+
 		wantData := model.Sensor{
 			SensorID:    "first",
 			Temperature: 13,
