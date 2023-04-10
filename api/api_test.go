@@ -1,12 +1,14 @@
 package api
 
 import (
+	"fmt"
+	"testing"
+
+	"github.com/gin-gonic/gin"
+	"github.com/stretchr/testify/require"
+
 	"blynker/internal/config"
 	"blynker/internal/service"
-	"fmt"
-	"github.com/stretchr/testify/require"
-	"net/http"
-	"testing"
 )
 
 func TestAPI_GetData(t *testing.T) {
@@ -14,11 +16,12 @@ func TestAPI_GetData(t *testing.T) {
 	require.NoError(t, err)
 
 	srvMock := service.NewMock(t)
+	router := gin.New()
 
 	api := API{
-		ServeMux: http.ServeMux{},
-		service:  srvMock,
-		conf:     conf,
+		Router:  router,
+		service: srvMock,
+		conf:    conf,
 	}
 
 	fmt.Println(api)
