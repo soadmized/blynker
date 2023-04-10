@@ -10,7 +10,7 @@ jobs:
         with:
           go-version: '>=1.18'
       - run: go mod download && go mod verify
-      - run: go build cmd/blynker/main.go
+      - run: go build main.go
   run-tests:
     runs-on: ubuntu-latest
     steps:

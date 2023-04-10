@@ -1,11 +1,11 @@
 package main
 
 import (
+	"log"
+	"strconv"
+
 	"blynker/api"
 	"blynker/internal/config"
-	"log"
-	"net/http"
-	"strconv"
 )
 
 func main() {
@@ -16,7 +16,8 @@ func main() {
 
 	addr := ":" + strconv.Itoa(conf.AppPort)
 	server := api.New(conf)
-	err = http.ListenAndServe(addr, server)
+
+	err = server.Router.Run(addr)
 	if err != nil {
 		log.Fatal(err)
 	}

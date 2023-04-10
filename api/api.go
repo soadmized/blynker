@@ -1,74 +1,90 @@
+//nolint:exhaustruct
 package api
 
 import (
-	"blynker/internal/config"
 	"encoding/json"
 	"log"
 	"net/http"
 	"time"
 
+	"github.com/gin-gonic/gin"
+
+	"blynker/internal/config"
 	"blynker/internal/iface"
 	"blynker/internal/model"
 	"blynker/internal/service"
 )
 
+const (
+	saveDataPath    = "/save_data"
+	getDataPath     = "/get_data"
+	checkStatusPath = "/"
+)
+
 type API struct {
-	http.ServeMux
+	Router  *gin.Engine
 	service iface.Service
 	conf    *config.Config
 }
 
 func New(conf *config.Config) *API {
 	srv := service.New(conf)
-	a := API{service: &srv, conf: conf}
+	router := gin.New()
+	a := &API{
+		service: &srv,
+		conf:    conf,
+		Router:  router,
+	}
 	a.routeHandlers()
 
-	return &a
+	return a
 }
 
 func (a *API) routeHandlers() {
-	a.HandleFunc("/", a.Route)
+	a.Router.POST(saveDataPath, a.SaveData)
+	a.Router.POST(getDataPath, a.GetData)
+	a.Router.GET(checkStatusPath, a.CheckStatus)
 }
 
-func (a *API) GetData(w http.ResponseWriter, req *http.Request) {
-	sensor := a.service.GetValues()
-	makeResponse(w, sensor)
+func (a *API) GetData(ctx *gin.Context) {
+	values := a.service.GetValues()
+	ctx.JSON(http.StatusOK, values)
 }
 
-func (a *API) SaveData(w http.ResponseWriter, req *http.Request) {
-	dec := json.NewDecoder(req.Body)
+func (a *API) SaveData(ctx *gin.Context) {
+	dec := json.NewDecoder(ctx.Request.Body)
 	s := model.Sensor{}
 
 	err := dec.Decode(&s)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		ctx.Writer.WriteHeader(http.StatusInternalServerError)
 		log.Print(err)
+
 		return
 	}
 
 	s.UpdatedAt = time.Now()
+
 	err = a.service.SaveValues(&s)
 	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
+		ctx.Writer.WriteHeader(http.StatusInternalServerError)
 		log.Print(err)
+
 		return
 	}
-	makeResponse(w, "DATA IS SAVED!")
+
+	ctx.String(http.StatusOK, "DATA IS SAVED!")
 }
 
-func (a *API) CheckStatus(w http.ResponseWriter, req *http.Request) {
+//nolint:gosimple
+func (a *API) CheckStatus(ctx *gin.Context) {
 	delta := a.service.GetValues().UpdatedAt.Sub(time.Now()).Abs()
+
 	if delta > time.Second*5 {
-		makeResponse(w, "Sensor is offline")
+		ctx.String(http.StatusOK, "Sensor is offline")
+
 		return
 	}
-	makeResponse(w, "Sensor is online")
-}
 
-func makeResponse(w http.ResponseWriter, data any) {
-	err := json.NewEncoder(w).Encode(data)
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		log.Print(err)
-	}
+	ctx.String(http.StatusOK, "Sensor is online")
 }

@@ -1,25 +1,43 @@
 package api
 
 import (
-	"blynker/internal/config"
-	"blynker/internal/service"
-	"fmt"
-	"github.com/stretchr/testify/require"
-	"net/http"
+	"net/http/httptest"
 	"testing"
+	"time"
+
+	"blynker/internal/config"
+	"blynker/internal/model"
+	"blynker/internal/service"
+
+	"github.com/gin-gonic/gin"
+	"github.com/stretchr/testify/require"
 )
 
 func TestAPI_GetData(t *testing.T) {
+	t.Parallel()
+
 	conf, err := config.Read()
 	require.NoError(t, err)
 
+	time := time.Now()
+	data := &model.Sensor{
+		SensorID:    "sensor",
+		Temperature: 12,
+		Light:       666,
+		Movement:    1,
+		UpdatedAt:   time,
+	}
 	srvMock := service.NewMock(t)
+	srvMock.On("GetValues").Return(data)
+
+	router := gin.New()
 
 	api := API{
-		ServeMux: http.ServeMux{},
-		service:  srvMock,
-		conf:     conf,
+		Router:  router,
+		service: srvMock,
+		conf:    conf,
 	}
 
-	fmt.Println(api)
+	ctx := gin.CreateTestContextOnly(httptest.NewRecorder(), router)
+	api.GetData(ctx)
 }

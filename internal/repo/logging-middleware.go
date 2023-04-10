@@ -12,16 +12,16 @@ type loggingMiddleware struct {
 }
 
 func (l loggingMiddleware) StoreValues(data *model.Sensor) error {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (l loggingMiddleware) GetValues() *model.Sensor {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 func (l loggingMiddleware) GetSensorIDs() []string {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }

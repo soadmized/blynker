@@ -1,12 +1,13 @@
+//nolint:exhaustruct
 package repo
 
 import (
-	"github.com/influxdata/influxdb-client-go/v2"
-	"github.com/influxdata/influxdb-client-go/v2/api/write"
-
 	"blynker/internal/config"
 	"blynker/internal/iface"
 	"blynker/internal/model"
+
+	"github.com/influxdata/influxdb-client-go/v2"
+	"github.com/influxdata/influxdb-client-go/v2/api/write"
 )
 
 var _ iface.Repository = &Repo{}
@@ -50,12 +51,12 @@ func (r *Repo) StoreValues(sensor *model.Sensor) error {
 }
 
 func (r *Repo) GetSensorIDs() []string {
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
 // prepareMeasurementPoint prepares data point for InfluxDB.
-// Accepts only "temperature", "light", "movement" arguments
+// Accepts only "temperature", "light", "movement" arguments.
 func (r *Repo) prepareMeasurementPoint(measurement string) *write.Point {
 	var arg any
 
