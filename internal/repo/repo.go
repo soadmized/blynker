@@ -5,6 +5,7 @@ import (
 	"blynker/internal/config"
 	"blynker/internal/iface"
 	"blynker/internal/model"
+	"sync"
 
 	"github.com/influxdata/influxdb-client-go/v2"
 	"github.com/influxdata/influxdb-client-go/v2/api/write"
@@ -16,6 +17,7 @@ type Repo struct {
 	Data   model.Sensor
 	conf   *config.Config
 	client influxdb2.Client
+	wg     sync.WaitGroup
 }
 
 func New(conf *config.Config) *Repo {
@@ -43,10 +45,23 @@ func (r *Repo) StoreValues(sensor *model.Sensor) error {
 	lightP := r.prepareMeasurementPoint("light")
 	moveP := r.prepareMeasurementPoint("movement")
 
-	go writeAPI.WritePoint(tempP)
-	go writeAPI.WritePoint(lightP)
-	go writeAPI.WritePoint(moveP)
+	r.wg.Add(1)
+	go func() {
+		writeAPI.WritePoint(tempP)
+		defer r.wg.Done()
+	}()
+	r.wg.Add(1)
+	go func() {
+		writeAPI.WritePoint(lightP)
+		defer r.wg.Done()
+	}()
+	r.wg.Add(1)
+	go func() {
+		writeAPI.WritePoint(moveP)
+		defer r.wg.Done()
+	}()
 
+	r.wg.Wait()
 	return nil
 }
 

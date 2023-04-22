@@ -26,7 +26,6 @@ At this time  _**Blynker**_ is using InfluxDB as a sensor values storage.
 - Add storage for sensors credentials
 - Add logging middleware
 - Add swagger
-- Add linters
 - Refactor `\get_data` to `\get_data\{sensorID}`
 - Add endpoint `\get_sensors`
 - Add github actions for auto deployment
@@ -36,3 +35,5 @@ At this time  _**Blynker**_ is using InfluxDB as a sensor values storage.
 #### DONE:
 
 - Remove CSV repo
+- Add linters
+
