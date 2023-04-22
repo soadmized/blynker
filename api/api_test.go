@@ -8,7 +8,6 @@ import (
 	"blynker/internal/config"
 	"blynker/internal/model"
 	"blynker/internal/service"
-
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/require"
 )

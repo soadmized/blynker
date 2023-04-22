@@ -8,7 +8,6 @@ import (
 
 	"blynker/internal/config"
 	"blynker/internal/model"
-
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )

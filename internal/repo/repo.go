@@ -2,11 +2,11 @@
 package repo
 
 import (
+	"sync"
+
 	"blynker/internal/config"
 	"blynker/internal/iface"
 	"blynker/internal/model"
-	"sync"
-
 	"github.com/influxdata/influxdb-client-go/v2"
 	"github.com/influxdata/influxdb-client-go/v2/api/write"
 )
@@ -46,22 +46,31 @@ func (r *Repo) StoreValues(sensor *model.Sensor) error {
 	moveP := r.prepareMeasurementPoint("movement")
 
 	r.wg.Add(1)
+
 	go func() {
 		writeAPI.WritePoint(tempP)
+
 		defer r.wg.Done()
 	}()
+
 	r.wg.Add(1)
+
 	go func() {
 		writeAPI.WritePoint(lightP)
+
 		defer r.wg.Done()
 	}()
+
 	r.wg.Add(1)
+
 	go func() {
 		writeAPI.WritePoint(moveP)
+
 		defer r.wg.Done()
 	}()
 
 	r.wg.Wait()
+
 	return nil
 }
 

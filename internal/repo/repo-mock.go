@@ -4,7 +4,6 @@ package repo
 
 import (
 	model "blynker/internal/model"
-
 	mock "github.com/stretchr/testify/mock"
 )
 

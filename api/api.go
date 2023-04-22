@@ -7,12 +7,11 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gin-gonic/gin"
-
 	"blynker/internal/config"
 	"blynker/internal/iface"
 	"blynker/internal/model"
 	"blynker/internal/service"
+	"github.com/gin-gonic/gin"
 )
 
 const (
